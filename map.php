@@ -20,8 +20,10 @@ if (isset($_GET['pageid'])) {
   <head>
     <title>Embedded Map</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/leaflet/0.7.7/leaflet.css">
-    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+    <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/leaflet/1.0.0-rc.3/leaflet.css">
+    <script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/leaflet/1.0.0-rc.3/leaflet.js"></script>
+    <link rel="stylesheet" href="Leaflet.Slider.css">
+    <script src="Leaflet.Slider.js"></script>
     <style>
       body {
         margin: 0;
@@ -37,21 +39,43 @@ if (isset($_GET['pageid'])) {
           [<?php echo $bbox[1] ?>, <?php echo $bbox[0] ?>]
         ]);
 
+<?php
+if (isset($_GET['wmf'])) {
+?>
+        L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
+          attribution: 'Wikimedia maps | Map data &copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+        }).addTo(map);
+<?php
+} else {
+?>
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-
+<?php
+}
+?>
         var wmsLayer = L.tileLayer.wms('<?php echo $wms; ?>', {
           layers: 'MapWarper',
           format: 'image/png',
           attribution: '<a href="<?php echo $commons; ?>">Wikimedia Commons</a>'
         }).addTo(map);
+
+<?php
+if (isset($_GET['opacity'])) {
+?>
+
+        var slider = L.control.slider({ position: 'bottomleft' }).addTo(map);
+        slider._container.addEventListener('sliderChange', function (e) {
+          var opacity = (100- e.detail.value) / 100;
+          wmsLayer.setOpacity(opacity);
+        }, false);
+<?php
+}
+?>
       }
     </script>
   </head>
-  <body id="map">
-    
-  </body>
+  <body id="map"></body>
 </html>
 <?php
   } else {
