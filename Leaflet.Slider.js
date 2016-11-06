@@ -66,20 +66,22 @@ L.Control.Slider = L.Control.extend({
       }
 
       function dropCallback(e) {
-        isMouseDown = false;
-        map.dragging.enable();
-        var event = new CustomEvent('sliderDrop', {
-          detail: {
-            value: currentVal
-          }
-        });
+        if (isMouseDown) {
+          isMouseDown = false;
+          map.dragging.enable();
+          var event = new CustomEvent('sliderDrop', {
+            detail: {
+              value: currentVal
+            }
+          });
 
-        root.dispatchEvent(event);
+          root.dispatchEvent(event);
+        }
       }
 
       root.querySelector('.LeafletSlider-button').addEventListener('mousedown', startSlide);
       root.addEventListener('mousemove', moving, false);
-      root.addEventListener('mouseup', dropCallback, false);
+      document.addEventListener('mouseup', dropCallback, false);
     });
     return root;
   }
