@@ -1,4 +1,5 @@
 <?php
+header("Access-Control-Allow-Origin: *");
 if (isset($_GET['pageid'])) {
   $curl = curl_init();
 
