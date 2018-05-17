@@ -8,9 +8,9 @@ The view should automatically fit to the warped map. In the future it would be n
 ## Optional Parameters
 
 ```
-wmf=true
+lang=sv
 ```
-Use the `wmf` parameter if you would like to use the Wikimedia Maps base-layer, this only works on selected sites maintained by the Wikimedia Foundation.
+This sets the language of the background map, all values available through Wikimedia Maps are valid.
 
 ```
 opacity=true
