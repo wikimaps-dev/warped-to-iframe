@@ -40,10 +40,22 @@ if (isset($_GET['pageid'])) {
           [<?php echo $bbox[1] ?>, <?php echo $bbox[0] ?>]
         ]);
 
+<?php
+// make sure the given lang value only contains letters or numbers as we inject the content without validation
+if (isset($_GET['lang']) && !preg_match('/[^A-Za-z0-9]/', $_GET['lang'])) {
+?>
+        L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png?lang=<?php echo $_GET['lang'] ?>', {
+          attribution: 'Wikimedia maps | Map data &copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+        }).addTo(map);
+<?php
+} else {
+?>
         L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
           attribution: 'Wikimedia maps | Map data &copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
         }).addTo(map);
-
+<?php
+}
+?>
         var wmsLayer = L.tileLayer.wms('<?php echo $wms; ?>', {
           layers: 'MapWarper',
           format: 'image/png',
